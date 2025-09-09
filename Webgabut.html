@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Semangat juan</title>
+  <style>
+    :root{--bg:#0f172a;--card:#111827;--accent:#7c3aed;--muted:#94a3b8;--text:#f1f5f9}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1e1b4b 0%, #0f172a 100%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{width:100%;max-width:880px;background:rgba(255,255,255,0.05);backdrop-filter:blur(12px);border-radius:20px;padding:28px;box-shadow:0 20px 40px rgba(0,0,0,0.6);position:relative;overflow:hidden;animation:fadeIn 1s ease}
+    header{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+    .logo{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#4c1d95);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:24px;box-shadow:0 6px 18px rgba(124,58,237,0.6);color:white}
+    h1{margin:0;font-size:26px;letter-spacing:0.5px}
+    p.lead{margin:6px 0 16px;color:var(--muted)}
+    .controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+    input[type=text],select,button{padding:12px 14px;border-radius:12px;border:none;font-size:15px}
+    input[type=text]{flex:1;min-width:180px;background:rgba(255,255,255,0.1);color:var(--text)}
+    select{background:rgba(124,58,237,0.9);color:white;font-weight:600;cursor:pointer}
+    button{background:var(--accent);color:white;font-weight:600;cursor:pointer;transition:transform .2s, background .3s}
+    button:hover{transform:scale(1.05);background:#6d28d9}
+    button.secondary{background:rgba(255,255,255,0.1);color:var(--muted)}
+
+    .messageBox{background:rgba(255,255,255,0.06);border-radius:16px;padding:20px;margin-top:8px;border:1px solid rgba(255,255,255,0.1)}
+    .message{font-size:20px;line-height:1.5}
+    .small{font-size:13px;color:var(--muted);margin-top:8px}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+    footer{margin-top:20px;color:var(--muted);font-size:13px;text-align:center}
+
+    #confetti{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+
+    .imageBox{text-align:center;margin:16px 0}
+    .imageBox img{max-width:220px;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,0.5);animation:float 3s ease-in-out infinite}
+
+    audio{width:100%;margin-top:16px;border-radius:12px}
+
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @media (max-width:600px){.controls{flex-direction:column}.row{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <canvas id="confetti"></canvas>
+    <header>
+      <div class="logo">R</div>
+      <div>
+        <h1>Semangatin juan</h1>
+        <p class="lead">Web kecil buat ngasih semangat ke teman Seperjuangan, dengan musik dan gambar biar makin Keren dan lebih berkesan ✨</p>
+      </div>
+    </header>
+
+    <div class="imageBox">
+      <img src="img/WhatsApp Image 2025-09-09 at 23.36.58_7925aecb.jpg" alt="Get well soon" />
+    </div>
+
+    <div class="controls">
+      <input id="nameInput" type="text" placeholder="Tulis namanya (mis. Iyen)" value="Juan" />
+      <select id="mood">
+        <option value="fun">Santai & Lucu</option>
+        <option value="calm">Lembut & Menenangkan</option>
+      </select>
+      <button id="makeBtn">Semangatin!</button>
+      <button id="surpriseBtn" class="secondary">Kirim Surprise</button>
+    </div>
+
+    <div class="messageBox">
+      <div id="message" class="message">Klik tombol "Semangatin!" buat lihat pesan penyemangat yang santai dan nggak kaku.</div>
+      <div id="hint" class="small">Tips: kamu bisa pakai tombol "Kirim Surprise" buat mainkan confetti + suara.</div>
+
+      <div class="actions">
+        <button id="copyBtn" class="secondary">Salin Pesan</button>
+        <button id="waBtn">Kirim via WhatsApp</button>
+        <button id="resetBtn" class="secondary">Reset</button>
+      </div>
+    </div>
+
+    <audio id="bgMusic" controls loop>
+      <source src="Sound/Avenged Sevenfold - A Little Piece Of Heaven [Official Music Video].mp3" type="audio/mpeg">
+      Browsermu tidak mendukung audio.
+    </audio>
+
+    <footer> Web Iseng Seadanya Buat temen terbaikkkk </footer>
+  </div>
+
+<script>
+const messages = {
+  fun: [
+    "Cepet sehat woii, biar bisa ketawa-ketawa bareng lagi 🤭 jangan kebanyakan rebahan, ntar kasurnya protes.",
+    "Sembuh dulu, ntar kita gigihin kamu sama cemilan berat. Kapan lagi kan? 😂",
+    "Jangan lama-lama sakitnya, aku kangen bacotanmu. Sembuh ya!"
+  ],
+  calm: [
+    "Istirahat yang cukup ya, semua aman. Aku ada di sini kalau butuh apa-apa.",
+    "Satu hari istirahat berarti seribu tenaga kembali. Semoga cepat pulih.",
+    "Tarik napas pelan, tenangkan badan. Waktunya tubuhmu recharge.",
+  ],
+  
+}
+
+const nameInput=document.getElementById('nameInput')
+const mood=document.getElementById('mood')
+const makeBtn=document.getElementById('makeBtn')
+const surpriseBtn=document.getElementById('surpriseBtn')
+const messageEl=document.getElementById('message')
+const copyBtn=document.getElementById('copyBtn')
+const waBtn=document.getElementById('waBtn')
+const resetBtn=document.getElementById('resetBtn')
+const bgMusic=document.getElementById('bgMusic')
+
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function personalize(text){
+  const name=nameInput.value.trim()||'teman'
+  return text.replace(/^(.*?)/, name+", ")
+}
+
+makeBtn.addEventListener('click',()=>{
+  const chosen=pick(messages[mood.value])
+  messageEl.textContent=personalize(chosen)
+})
+
+copyBtn.addEventListener('click',()=>{
+  navigator.clipboard.writeText(messageEl.textContent).then(()=>alert('Pesan disalin!')).catch(()=>alert('Gagal salin.'))
+})
+
+waBtn.addEventListener('click',()=>{
+  const text=encodeURIComponent(messageEl.textContent+'\n\n- dari kamu')
+  const url='https://wa.me/?text='+text
+  window.open(url,'_blank')
+})
+
+resetBtn.addEventListener('click',()=>{
+  nameInput.value='Iyen'
+  mood.value='fun'
+  messageEl.textContent='Klik tombol "Semangatin!" buat lihat pesan penyemangat yang santai dan nggak kaku.'
+})
+
+surpriseBtn.addEventListener('click',()=>{
+  startConfetti(); playBeep(); bgMusic.play();
+})
+
+const confettiCanvas=document.getElementById('confetti')
+const ctx=confettiCanvas.getContext('2d')
+let particles=[]
+function resize(){confettiCanvas.width=confettiCanvas.clientWidth;confettiCanvas.height=confettiCanvas.clientHeight}
+window.addEventListener('resize',resize);resize()
+function random(min,max){return Math.random()*(max-min)+min}
+function startConfetti(){
+  particles=[]
+  for(let i=0;i<150;i++){
+    particles.push({x:random(0,confettiCanvas.width),y:random(-confettiCanvas.height,0),vx:random(-1.5,1.5),vy:random(1,4),size:random(4,9),rot:random(0,360),vr:random(-6,6),color:`hsl(${Math.floor(random(0,360))},80%,60%)`})
+  }
+  requestAnimationFrame(update)
+  setTimeout(()=>particles=[],2000)
+}
+function update(){
+  ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height)
+  for(const p of particles){
+    p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180)
+    ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6)
+    ctx.restore()
+  }
+  if(particles.length)requestAnimationFrame(update)
+}
+function playBeep(){
+  const ctxA=new(window.AudioContext||window.webkitAudioContext)()
+  const o=ctxA.createOscillator();const g=ctxA.createGain();o.connect(g);g.connect(ctxA.destination)
+  o.type='sine';o.frequency.value=880;g.gain.value=0.06;o.start();
+  setTimeout(()=>{o.frequency.value=660},120);setTimeout(()=>{o.stop()},420)
+}
+
+setTimeout(()=>{messageEl.textContent='Halo Juan! Klik "Semangatin!" biar muncul ucapan + musik.'},700)
+</script>
+</body>
+</html>
